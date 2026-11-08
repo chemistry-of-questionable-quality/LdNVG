@@ -1,0 +1,51 @@
+NIGHT VISION MONOCULAR - CONTROLS
+LAFVIN ESP32-S3 1.69" LCD board (OV3660 camera)
+Sketch: lafvin_nightvision_nolib.ino
+
+GAIN LEVELS
+  10 levels in GRAYSCALE and 10 in COLOUR.
+  Level 1 = lowest gain, level 10 = maximum gain (the old BOOST setting).
+  Higher levels are brighter but grainier, and may slow the frame rate.
+  After level 10 the cycle repeats levels 1-10 with EDGE HIGHLIGHTING
+  (yellow outlines drawn on the picture), then returns to plain levels.
+
+BOOT BUTTON (the GPIO0 button)
+  Short press (under 0.8 s) : next step
+                                levels 1-10, then levels 1-10 with edges, then
+                                levels 1-10 plain again, and so on
+                                (the camera restarts briefly at each wrap)
+  Medium hold (0.8 - 2 s)   : change screen brightness
+                                100% -> 50% -> 15% -> 4% -> back to 100%
+  Long hold (over 2 s)      : switch between GRAYSCALE and COLOUR
+  (The action happens when you release the button.)
+
+STATUS STRIP (top of the screen)
+  Square       : grey = grayscale, orange = colour
+  First number : gain level 1-10 (cyan); a yellow E after it = edges on
+  Second number: frames per second (green)
+  Four bars    : screen brightness (4 lit = 100%, 1 lit = 4%)
+
+RESET BUTTON
+  Restarts the program.
+
+TIPS
+  - Edge highlighting costs some frame rate. If it shows too many speckles,
+    raise EDGE_THRESHOLD in the sketch; if too few edges, lower it.
+  - Start at a middle level and step up until the picture is bright
+    enough. More IR light is better than more gain.
+  - Lower screen brightness keeps your eye dark-adapted and saves battery.
+  - Do not hold BOOT while powering on. That puts the board into
+    firmware download mode and nothing will run.
+
+STATUS LED
+  The RGB LED (GPIO 48, from Lafvin's pin_config.h) is switched off at startup.
+  Set LED_GPIO to -1 near the top of the sketch to leave it alone.
+
+STARTUP ERROR SCREENS
+  Solid RED screen     : PSRAM not found (set PSRAM to OPI PSRAM)
+  Solid MAGENTA screen : camera failed to start (check the camera ribbon cable)
+
+FLASHING NEW CODE
+  1. Hold BOOT, plug in the USB cable, release BOOT.
+  2. Upload.
+  3. Press RESET when it finishes.
